@@ -17,31 +17,34 @@ const Imagegen = () => {
 
   const handlegenerate = async () => {
     setLoading(true);
-    
+    console.log("Generating image...");
+  
     const encodedPrompt = encodeURIComponent(Prompt);
-    
     const url = `${process.env.REACT_APP_FETCH_URL}/${encodedPrompt}?height=${Height}&width=${Width}&nologo=True`;
+    console.log("Generated URL:", url);
   
     try {
       const response = await fetch(url);
+      console.log("API Response Status:", response.status);
   
       if (!response.ok) {
         throw new Error(`Failed to fetch image: ${response.statusText}`);
       }
   
       const blob = await response.blob();
-      const imageUrl = URL.createObjectURL(blob); 
-      setimg(imageUrl); 
+      console.log("Blob received:", blob);
+  
+      const imageUrl = URL.createObjectURL(blob);
+      console.log("Image URL:", imageUrl);
+  
+      setimg(imageUrl);
     } catch (error) {
-      console.error('Error generating the image:', error.message);
+      console.error("Error generating the image:", error.message);
     } finally {
       setLoading(false);
+      console.log("Finished image generation.");
     }
   };
-  
-
-
-
   return (
     <>
       <h1>AI Image Generator</h1>
