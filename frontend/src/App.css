@@ -1,0 +1,61 @@
+.App{
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+}
+
+.home{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 85vh;
+  flex-direction: column;
+  gap: 15px;
+}
+.textgen{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  bottom: 50px;
+  gap: 15px;
+  .IN{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    width: 100%;
+    margin-top: 7%;
+  }
+  .container{
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-top:20px;
+    padding: 25px;
+    height:80vh;
+    width: 50%;
+    box-shadow: 0px 1px 14px -3px rgba(0,0,0,0.37);
+    -webkit-box-shadow: 0px 1px 14px -3px rgba(0,0,0,0.37);
+    -moz-box-shadow: 0px 1px 14px -3px rgba(0,0,0,0.37);
+    border-radius: 28px 28px 28px 28px;
+    -webkit-border-radius: 28px 28px 28px 28px;
+    -moz-border-radius: 28px 28px 28px 28px;
+  }
+  .text-container{
+    display: flex;
+    flex-direction: column;
+    overflow-y:auto;
+    gap: 1px;
+    height: 80vh;
+    width: 50vw;
+  }
+  .question-container{
+    display: flex;
+    justify-content: flex-end;
+  }
+  .response-container{
+    display: flex;
+    justify-content: flex-start;
+  }
+}

@@ -1,0 +1,642 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "NVIDIA NIM API for stabilityai/sdxl",
+    "description": "The NVIDIA NIM REST API. Please see https://docs.api.nvidia.com/nim for more details.",
+    "version": "1.0.0",
+    "termsOfService": "https://nvidia.com/legal/terms-of-use",
+    "contact": {
+      "name": "NVIDIA Support",
+      "url": "https://help.nvidia.com/"
+    },
+    "license": {
+      "name": "Stability AI CreativeML Open RAIL++-M",
+      "url": "https://github.com/Stability-AI/generative-models/blob/main/model_licenses/LICENSE-SDXL1.0"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://ai.api.nvidia.com/v1/"
+    }
+  ],
+  "paths": {
+    "/genai/stabilityai/stable-diffusion-xl": {
+      "post": {
+        "summary": " Infer",
+        "operationId": "_infer_infer_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "additionalProperties": false,
+                "properties": {
+                  "height": {
+                    "maximum": 1024,
+                    "minimum": 1024,
+                    "type": "integer",
+                    "default": 1024,
+                    "description": "Height of the image to generate, in pixels. Only height=1024 is supported",
+                    "title": "Height"
+                  },
+                  "width": {
+                    "maximum": 1024,
+                    "minimum": 1024,
+                    "type": "integer",
+                    "default": 1024,
+                    "description": "Width of the image to generate, in pixels. Only width=1024 is supported",
+                    "title": "Width"
+                  },
+                  "text_prompts": {
+                    "description": "An array of text prompts to use for generation",
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "text": {
+                          "description": "The prompt itself",
+                          "examples": [
+                            "A photo of a Shiba Inu dog with a backpack riding a bike"
+                          ],
+                          "title": "Text",
+                          "type": "string"
+                        },
+                        "weight": {
+                          "enum": [
+                            1,
+                            -1
+                          ],
+                          "type": "number",
+                          "default": 1,
+                          "description": "Weight of the prompt, only weight=1.0 for prompt and weight=-1 for negative prompt is supported",
+                          "title": "Weight"
+                        }
+                      },
+                      "required": [
+                        "text"
+                      ],
+                      "title": "TextPrompt",
+                      "type": "object"
+                    },
+                    "maxItems": 2,
+                    "minItems": 1,
+                    "title": "Text Prompts",
+                    "type": "array"
+                  },
+                  "cfg_scale": {
+                    "exclusiveMinimum": 1,
+                    "maximum": 9,
+                    "type": "number",
+                    "default": 5,
+                    "description": "How strictly the diffusion process adheres to the prompt text (higher values keep your image closer to your prompt).",
+                    "title": "Cfg Scale"
+                  },
+                  "clip_guidance_preset": {
+                    "enum": [
+                      "NONE"
+                    ],
+                    "type": "string",
+                    "default": "NONE",
+                    "description": "clip guidance preset. Only clip_guidance_preset=`NONE` is supported",
+                    "title": "Clip Guidance Preset"
+                  },
+                  "sampler": {
+                    "enum": [
+                      "DDIM",
+                      "K_EULER_ANCESTRAL",
+                      "K_LMS",
+                      "K_DPM_2_ANCESTRAL"
+                    ],
+                    "type": "string",
+                    "default": "K_DPM_2_ANCESTRAL",
+                    "description": "The sampler to use for generation. Varying diffusion samplers will vary outputs significantly.",
+                    "title": "Sampler"
+                  },
+                  "samples": {
+                    "maximum": 1,
+                    "minimum": 1,
+                    "type": "integer",
+                    "default": 1,
+                    "description": "Number of images to generate. Only samples=1 is supported",
+                    "title": "Samples"
+                  },
+                  "seed": {
+                    "exclusiveMaximum": 4294967296,
+                    "minimum": 0,
+                    "type": "integer",
+                    "default": 0,
+                    "description": "The seed which governs generation. Omit this option or use 0 for a random seed",
+                    "title": "Seed"
+                  },
+                  "steps": {
+                    "maximum": 100,
+                    "minimum": 5,
+                    "type": "integer",
+                    "default": 25,
+                    "description": "Number of diffusion steps to run",
+                    "title": "Steps"
+                  },
+                  "style_preset": {
+                    "enum": [
+                      "none"
+                    ],
+                    "type": "string",
+                    "default": "none",
+                    "description": "Pass in a style preset to guide the image model towards a particular style. This list of style presets is subject to change. style_preset=`none` is supported",
+                    "title": "Style Preset"
+                  }
+                },
+                "required": [
+                  "text_prompts"
+                ],
+                "title": "ImageRequest",
+                "type": "object"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "artifacts": {
+                      "items": {
+                        "properties": {
+                          "base64": {
+                            "description": "A base64-encoded string of the generated image (JPEG)",
+                            "examples": [
+                              "/9j/4AAQSkZ...b+AVZ/9k="
+                            ],
+                            "title": "Base64",
+                            "type": "string"
+                          },
+                          "finishReason": {
+                            "allOf": [
+                              {
+                                "enum": [
+                                  "CONTENT_FILTERED",
+                                  "ERROR",
+                                  "SUCCESS"
+                                ],
+                                "title": "FinishReason",
+                                "type": "string"
+                              }
+                            ],
+                            "description": "The result of the generation process. `SUCCESS` indicates success. `ERROR` indicates an error. `CONTENT_FILTERED` indicates the result affected by the content filter"
+                          },
+                          "seed": {
+                            "description": "The seed used during generation",
+                            "title": "Seed",
+                            "type": "integer"
+                          }
+                        },
+                        "required": [
+                          "base64",
+                          "finishReason",
+                          "seed"
+                        ],
+                        "title": "Artifact",
+                        "type": "object"
+                      },
+                      "maxItems": 1,
+                      "minItems": 1,
+                      "title": "Artifacts",
+                      "type": "array"
+                    }
+                  },
+                  "required": [
+                    "artifacts"
+                  ],
+                  "title": "ImageResponse",
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "detail": {
+                      "items": {
+                        "properties": {
+                          "loc": {
+                            "items": {
+                              "anyOf": [
+                                {
+                                  "type": "string"
+                                },
+                                {
+                                  "type": "integer"
+                                }
+                              ]
+                            },
+                            "type": "array",
+                            "title": "Location"
+                          },
+                          "msg": {
+                            "type": "string",
+                            "title": "Message"
+                          },
+                          "type": {
+                            "type": "string",
+                            "title": "Error Type"
+                          }
+                        },
+                        "type": "object",
+                        "required": [
+                          "loc",
+                          "msg",
+                          "type"
+                        ],
+                        "title": "ValidationError"
+                      },
+                      "type": "array",
+                      "title": "Detail"
+                    }
+                  },
+                  "type": "object",
+                  "title": "HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "x-nvai-meta": {
+          "name": "Generate a new image from a text prompt",
+          "returns": "Returns an Image artifact that consists from a generated image (JPEG) encoded in base64, finish reason and a seed used during the generation",
+          "path": "infer",
+          "examples": [
+            {
+              "name": "a photo of an astronaut riding a horse on mars",
+              "requestJson": "'{\n    \"text_prompts\": [{\"text\":\"a photo of an astronaut riding a horse on mars\"}]\n}'\n",
+              "responseJson": "'{\n    \"artifacts\": [\n        {\n            \"base64\":  \"...very long string...\",\n            \"finishReason\": \"SUCCESS\",\n            \"seed\": 1100106574\n        }\n    ]\n}'\n"
+            },
+            {
+              "name": "A close-up of a single rose, its petals glistening in the sunlight",
+              "requestJson": "'{\n    \"text_prompts\": [\n        {\n            \"text\": \"A close-up of a single rose, its petals glistening in the sunlight\",\n            \"weight\": 1\n        },\n        {\n            \"text\": \"white\",\n            \"weight\": -1\n        }\n    ]\n}'\n",
+              "responseJson": "'{\n    \"artifacts\": [\n        {\n            \"base64\":  \"...very long string...\",\n            \"finishReason\": \"SUCCESS\",\n            \"seed\": 2469608862\n        }\n    ]\n}'\n"
+            }
+          ],
+          "templates": [
+            {
+              "title": "Example",
+              "requestEjs": {
+                "python": "import requests\n\ninvoke_url = \"https://api.nvcf.nvidia.com/v2/nvcf/pexec/functions/$SDXL_FUNCTION_ID\"\nfetch_url_format = \"https://api.nvcf.nvidia.com/v2/nvcf/pexec/status/\"\n\nheaders = {\n    \"Authorization\": \"Bearer $API_KEY_REQUIRED_IF_EXECUTING_OUTSIDE_NGC\",\n    \"Accept\": \"application/json\",\n}\n\npayload = {\n    \"text_prompts\": [\n        {\n            \"text\": \"a photo of an astronaut riding a horse on mars\"\n        }\n    ],\n    \"cfg_scale\": 7.5,\n    \"seed\":0,\n    \"steps\": 30\n}\n\n# re-use connections\nsession = requests.Session()\n\nresponse = session.post(invoke_url, headers=headers, json=payload)\n\nwhile response.status_code == 202:\n    request_id = response.headers.get(\"NVCF-REQID\")\n    fetch_url = fetch_url_format + request_id\n    response = session.get(fetch_url, headers=headers)\n\nresponse.raise_for_status()\nresponse_body = response.json()\nprint(response_body)",
+                "node.js": "import fetch from \"node-fetch\";\n\nconst invokeUrl = \"https://api.nvcf.nvidia.com/v2/nvcf/pexec/functions/$SDXL_FUNCTION_ID\"\nconst fetchUrlFormat = \"https://api.nvcf.nvidia.com/v2/nvcf/pexec/status/\"\n\nconst headers = {\n    \"Authorization\": \"Bearer $API_KEY_REQUIRED_IF_EXECUTING_OUTSIDE_NGC\",\n    \"Accept\": \"application/json\",\n}\n\nconst payload = {\n  \"text_prompts\": [\n        {\n            \"text\": \"a photo of an astronaut riding a horse on mars\"\n        }\n    ],\n    \"cfg_scale\": 7.5,\n    \"seed\":0,\n    \"steps\": 30\n}\n\nlet response = await fetch(invokeUrl, {\n    method: \"post\",\n    body: JSON.stringify(payload),\n    headers: { \"Content-Type\": \"application/json\", ...headers }\n});\n\nwhile (response.status == 202) {\n  let requestId = response.headers.get(\"NVCF-REQID\")\n  let fetchUrl = fetchUrlFormat + requestId;\n  response = await fetch(fetchUrl, {\n      method: \"get\",\n      headers: headers\n  })\n}\n\nif (response.status != 200) {\n  let errBody = await (await response.blob()).text()\n  throw \"invocation failed with status \" + response.status + \" \" + errBody\n}\n\nlet response_body = await response.json()\n\nconsole.log(JSON.stringify(response_body))\n",
+                "curl": "\ninvoke_url='https://api.nvcf.nvidia.com/v2/nvcf/pexec/functions/$SDXL_FUNCTION_ID'\nfetch_url_format='https://api.nvcf.nvidia.com/v2/nvcf/pexec/status/'\n\nauthorization_header='Authorization: Bearer $API_KEY_REQUIRED_IF_EXECUTING_OUTSIDE_NGC'\naccept_header='Accept: application/json'\ncontent_type_header='Content-Type: application/json'\n\ndata='{\n  \"text_prompts\": [\n        {\n            \"text\": \"a photo of an astronaut riding a horse on mars\"\n        }\n    ],\n    \"cfg_scale\": 7.5,\n    \"seed\":0,\n    \"steps\": 30\n}'\n\nresponse=$(curl --silent -i -w \"\n%{http_code}\" --request POST   --url \"$invoke_url\"   --header \"$authorization_header\"   --header \"$accept_header\"   --header \"$content_type_header\"   --data \"$data\"\n)\n\nhttp_code=$(echo \"$response\" | tail -n 1)\nreq_id=$(echo \"$response\" | grep -i '^nvcf-reqid:' | awk '{print $2}' | tr -d '\r')\n\nwhile [ \"$http_code\" -eq 202 ]; do\n  response=$(curl --silent -i -w \"\n%{http_code}\" --request GET     --url \"$fetch_url_format$req_id\"     --header \"$authorization_header\"     --header \"$accept_header\"     --header \"$content_type_header\"   )\n\n  http_code=$(echo \"$response\" | tail -n 1)\n  req_id=$(echo \"$response\" | grep -i '^nvcf-reqid:' | awk '{print $2}' | tr -d '\r')\ndone\n\necho \"$response\" | awk '/{/,EOF-1'\n"
+              },
+              "response": "'{\n    \"artifacts\": [\n        {\n            \"base64\":  \"...very long string...\",\n            \"finishReason\": \"SUCCESS\",\n            \"seed\": 1900390440\n        }\n    ]\n}'\n"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "security": [
+    {
+      "Token": []
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "Token": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    },
+    "schemas": {
+      "Artifact": {
+        "properties": {
+          "base64": {
+            "description": "A base64-encoded string of the generated image (JPEG)",
+            "examples": [
+              "/9j/4AAQSkZ...b+AVZ/9k="
+            ],
+            "title": "Base64",
+            "type": "string"
+          },
+          "finishReason": {
+            "allOf": [
+              {
+                "enum": [
+                  "CONTENT_FILTERED",
+                  "ERROR",
+                  "SUCCESS"
+                ],
+                "title": "FinishReason",
+                "type": "string"
+              }
+            ],
+            "description": "The result of the generation process. `SUCCESS` indicates success. `ERROR` indicates an error. `CONTENT_FILTERED` indicates the result affected by the content filter"
+          },
+          "seed": {
+            "description": "The seed used during generation",
+            "title": "Seed",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "base64",
+          "finishReason",
+          "seed"
+        ],
+        "title": "Artifact",
+        "type": "object"
+      },
+      "FinishReason": {
+        "enum": [
+          "CONTENT_FILTERED",
+          "ERROR",
+          "SUCCESS"
+        ],
+        "title": "FinishReason",
+        "type": "string"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "properties": {
+                "loc": {
+                  "items": {
+                    "anyOf": [
+                      {
+                        "type": "string"
+                      },
+                      {
+                        "type": "integer"
+                      }
+                    ]
+                  },
+                  "type": "array",
+                  "title": "Location"
+                },
+                "msg": {
+                  "type": "string",
+                  "title": "Message"
+                },
+                "type": {
+                  "type": "string",
+                  "title": "Error Type"
+                }
+              },
+              "type": "object",
+              "required": [
+                "loc",
+                "msg",
+                "type"
+              ],
+              "title": "ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "ImageRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "height": {
+            "maximum": 1024,
+            "minimum": 1024,
+            "type": "integer",
+            "default": 1024,
+            "description": "Height of the image to generate, in pixels. Only height=1024 is supported",
+            "title": "Height"
+          },
+          "width": {
+            "maximum": 1024,
+            "minimum": 1024,
+            "type": "integer",
+            "default": 1024,
+            "description": "Width of the image to generate, in pixels. Only width=1024 is supported",
+            "title": "Width"
+          },
+          "text_prompts": {
+            "description": "An array of text prompts to use for generation",
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "text": {
+                  "description": "The prompt itself",
+                  "examples": [
+                    "A photo of a Shiba Inu dog with a backpack riding a bike"
+                  ],
+                  "title": "Text",
+                  "type": "string"
+                },
+                "weight": {
+                  "enum": [
+                    1,
+                    -1
+                  ],
+                  "type": "number",
+                  "default": 1,
+                  "description": "Weight of the prompt, only weight=1.0 for prompt and weight=-1 for negative prompt is supported",
+                  "title": "Weight"
+                }
+              },
+              "required": [
+                "text"
+              ],
+              "title": "TextPrompt",
+              "type": "object"
+            },
+            "maxItems": 2,
+            "minItems": 1,
+            "title": "Text Prompts",
+            "type": "array"
+          },
+          "cfg_scale": {
+            "exclusiveMinimum": 1,
+            "maximum": 9,
+            "type": "number",
+            "default": 5,
+            "description": "How strictly the diffusion process adheres to the prompt text (higher values keep your image closer to your prompt).",
+            "title": "Cfg Scale"
+          },
+          "clip_guidance_preset": {
+            "enum": [
+              "NONE"
+            ],
+            "type": "string",
+            "default": "NONE",
+            "description": "clip guidance preset. Only clip_guidance_preset=`NONE` is supported",
+            "title": "Clip Guidance Preset"
+          },
+          "sampler": {
+            "enum": [
+              "DDIM",
+              "K_EULER_ANCESTRAL",
+              "K_LMS",
+              "K_DPM_2_ANCESTRAL"
+            ],
+            "type": "string",
+            "default": "K_DPM_2_ANCESTRAL",
+            "description": "The sampler to use for generation. Varying diffusion samplers will vary outputs significantly.",
+            "title": "Sampler"
+          },
+          "samples": {
+            "maximum": 1,
+            "minimum": 1,
+            "type": "integer",
+            "default": 1,
+            "description": "Number of images to generate. Only samples=1 is supported",
+            "title": "Samples"
+          },
+          "seed": {
+            "exclusiveMaximum": 4294967296,
+            "minimum": 0,
+            "type": "integer",
+            "default": 0,
+            "description": "The seed which governs generation. Omit this option or use 0 for a random seed",
+            "title": "Seed"
+          },
+          "steps": {
+            "maximum": 100,
+            "minimum": 5,
+            "type": "integer",
+            "default": 25,
+            "description": "Number of diffusion steps to run",
+            "title": "Steps"
+          },
+          "style_preset": {
+            "enum": [
+              "none"
+            ],
+            "type": "string",
+            "default": "none",
+            "description": "Pass in a style preset to guide the image model towards a particular style. This list of style presets is subject to change. style_preset=`none` is supported",
+            "title": "Style Preset"
+          }
+        },
+        "required": [
+          "text_prompts"
+        ],
+        "title": "ImageRequest",
+        "type": "object"
+      },
+      "ImageResponse": {
+        "properties": {
+          "artifacts": {
+            "items": {
+              "properties": {
+                "base64": {
+                  "description": "A base64-encoded string of the generated image (JPEG)",
+                  "examples": [
+                    "/9j/4AAQSkZ...b+AVZ/9k="
+                  ],
+                  "title": "Base64",
+                  "type": "string"
+                },
+                "finishReason": {
+                  "allOf": [
+                    {
+                      "enum": [
+                        "CONTENT_FILTERED",
+                        "ERROR",
+                        "SUCCESS"
+                      ],
+                      "title": "FinishReason",
+                      "type": "string"
+                    }
+                  ],
+                  "description": "The result of the generation process. `SUCCESS` indicates success. `ERROR` indicates an error. `CONTENT_FILTERED` indicates the result affected by the content filter"
+                },
+                "seed": {
+                  "description": "The seed used during generation",
+                  "title": "Seed",
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "base64",
+                "finishReason",
+                "seed"
+              ],
+              "title": "Artifact",
+              "type": "object"
+            },
+            "maxItems": 1,
+            "minItems": 1,
+            "title": "Artifacts",
+            "type": "array"
+          }
+        },
+        "required": [
+          "artifacts"
+        ],
+        "title": "ImageResponse",
+        "type": "object"
+      },
+      "TextPrompt": {
+        "additionalProperties": false,
+        "properties": {
+          "text": {
+            "description": "The prompt itself",
+            "examples": [
+              "A photo of a Shiba Inu dog with a backpack riding a bike"
+            ],
+            "title": "Text",
+            "type": "string"
+          },
+          "weight": {
+            "enum": [
+              1,
+              -1
+            ],
+            "type": "number",
+            "default": 1,
+            "description": "Weight of the prompt, only weight=1.0 for prompt and weight=-1 for negative prompt is supported",
+            "title": "Weight"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "title": "TextPrompt",
+        "type": "object"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    }
+  }
+}

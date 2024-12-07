@@ -1,0 +1,110 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+h1 {
+    text-align: center;
+}
+
+h4 {
+    font-weight: lighter;
+    color: grey;
+}
+
+.imagegen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 85vh;
+    flex-direction: column;
+    gap: 15px;
+}
+
+textarea {
+    box-sizing: border-box;
+    width: 50vw;
+    height: 20vh;
+
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 8px 12px;
+    outline: 0;
+    border-radius: 8px;
+    border-color: rgb(191, 191, 191);
+    scroll-behavior: auto;
+
+    &:focus {
+        border-color: rgb(29, 29, 30);
+    }
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    gap: 15px;
+    padding: 35px;
+}
+
+.image {
+    display: none; /* Hide the image container when there's no content */
+    width: 100%; /* Make the image take up full width of the container */
+    max-width: 100%; /* Prevent overflow */
+    height: auto; /* Maintain the image aspect ratio */
+    object-fit: contain; /* Ensure the image fits well inside the div */
+    border-radius: 8px; /* Optional: Rounded corners for better visuals */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Optional: Add a shadow for depth */
+  }
+  
+  .image img {
+    width: 100%; /* Ensure the image fits within the container */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Prevent inline spacing issues */
+  }
+  
+.settings-container {
+    width: 50vw;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.settings {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 25px;
+    padding: 15px;
+    gap: 25px;
+    flex-direction: column;
+}
+
+.image-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    flex-direction: column;
+    button {
+        background-color: black;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        width: 15vw;
+        border-radius: 5px;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+textarea {
+    min-height: 5vw;
+}

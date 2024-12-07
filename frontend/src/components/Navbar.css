@@ -1,0 +1,113 @@
+.navbar{
+    display: flex;
+    justify-content: start;
+    flex-direction: column;  
+    height:100vh;
+    border-right:1px solid black ;
+    position:fixed;
+    width: 6vw;
+    a{
+        text-decoration: none;
+        color: black;
+        height:20vh ;
+        transition: 100ms;
+
+    }
+}
+.navbar-active{
+    display: flex;
+    justify-content: start;
+    flex-direction: column;  
+    height:100vh;
+    border-right:1px solid black ;
+    position:fixed;
+    width: 15vw;
+    transition: 350ms;
+    a{
+        text-decoration: none;
+        color: black;
+    }
+}
+.openlogo{
+    margin-left: 1rem;
+    padding: 10px;
+    font-size: 2rem;
+    background: transparent;
+    transition: 350ms;
+}
+.closelogo{
+    justify-content: flex-end;
+    margin-left: 7rem;
+    padding: 10px;
+    font-size: 2rem;
+    background: transparent;
+    transition: 350ms;
+}
+.nav-menu{
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100vh;
+    position:fixed;
+    top: 0;
+    left: -100%;
+    transition: 850ms;
+}
+
+.nav-menu.active{
+    left: 0;
+}
+.nav-menu-items{
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 10px 0;
+    text-align: center;
+    justify-content: center;
+}
+.nav-text{
+    border-radius: 8%;
+    display: flex;
+    margin-left: 5px;
+    align-items: center;
+    justify-content: center;
+    width: 95%;
+    height:2rem;
+}
+.nav-text a{
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight:normal;
+    width: 100%;
+    color: rgb(3, 1, 1);
+    transition: 350ms;
+}
+span{
+    margin-left: 1rem;
+    font-size:1rem;
+}
+.nav-text:hover{
+    background-color: #f0f0f0f6;
+    transition: 350ms;
+}
+@media (max-width: 768px) {
+    .navbar, .navbar-active {
+        width: 12vw;
+    }
+
+    .openlogo, .closelogo {
+        margin-left: 0.5rem;
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar, .navbar-active {
+        width: 20vw;
+    }
+
+    .openlogo, .closelogo {
+        margin-left: 0.5rem;
+        font-size: 1.2rem;
+    }
+}
