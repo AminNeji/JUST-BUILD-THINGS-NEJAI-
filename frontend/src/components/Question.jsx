@@ -14,11 +14,12 @@ const Question = ({questiontext}) => {
 const StyledWrapper=styled.div`
     .question{
         display:flex;
-        background-color:#f5f5f5;
+        background-color:#e8e8e8;
         align-items:center;
         justify-content:flex-start;
+        border: 1px solid black;
         margin-right: 5px;
-        padding: 5px;
+        padding: 12px;
         border-radius:25px;
 }`
 

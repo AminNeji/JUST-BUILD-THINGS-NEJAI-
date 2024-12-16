@@ -35,12 +35,12 @@ const Response = ({ responsetext }) => {
 const StyledWrapper = styled.div`
     .response{
         display:flex;
-        background-color:black;
+        background-color:#131313;
         color:white;
         align-items:center;
         justify-content:flex-start;
         margin-left: 5px;
-        padding: 10px ;
+        padding: 10px;
         box-shadow: 0px 1px 14px -3px rgba(0,0,0,0.37);
         border-radius:25px;
 }

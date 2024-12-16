@@ -52,10 +52,13 @@
   }
   .question-container{
     display: flex;
+    margin-right:5px;
     justify-content: flex-end;
   }
   .response-container{
     display: flex;
+    margin-left:10px;
+    margin-right: 10px;
     justify-content: flex-start;
   }
 }
